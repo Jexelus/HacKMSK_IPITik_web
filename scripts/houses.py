@@ -1,4 +1,5 @@
 import json
+import os
 import geocoder
 
 def get_houses_dic():
@@ -42,25 +43,30 @@ def add_house(data): # WEB version
         f.close()
     return
 
-def update_house(data): # TODO: API version
-    houses = get_houses_dic()
-    address_encodet = geocoder.bing(data['address'], method='reverse', key="AgcMEj_11MYB6Epe-VDXd9IP-LbzfMqVCQR0M6_AgUqKQ59O8fba4q51i4MjYD6R")
-    for res in address_encodet:
-        address = str(res.city) + ','+' '+str(res.street)
+def update_house(data, video): # TODO: API version
+    houses = get_houses_dic()            
+    address = data['address']
     del data['address']
-    data['video'] = 'fp' # TODO: handle of video
+    if not os.path.exists('./videos/raw/'+address):
+        os.makedirs('./videos/raw/'+address)
+    # data['video'] = '/videos/raw' # TODO: handle of video
     for room, data_r in houses[address]['data'].items():
         if data['floor'] == data_r['floor'] and data['flat'] == data_r['flat'] and data['room_type'] == data_r['room_type']:
+            data['video'] = './videos/raw/'+address+"/"+str(room) + ".mp4"
             houses[address]['data'][room] = data
             with open('./Houses/houses.json', 'w') as f:
                 json.dump(houses, f, indent=3)
                 f.close()
-            return        
+            video.save('./videos/raw/'+address+"/"+str(room) + ".mp4")
+            return
+    path = "./videos/raw/" + address + "/" + str(len(houses[address]['data'])+1) + ".mp4"
     houses[address]['data'].update({len(houses[address]['data'])+1:data})
+    houses[address]['data'][len(houses[address]['data'])]['video'] = path
+    video.save(path)
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
         f.close()
-    return 
+    return
 
 def delete_house_room(address, floor, flat, room_type): # TODO: API version
     houses = get_houses_dic()
@@ -91,7 +97,7 @@ def delete_house(address): # TODO
     return
 
 d = {
-    'address':[54.085676118550104, 37.832003036313964],
+    'address':[59.5546666666667, 33.5907516666667],
     'floors':'5',
     'flats':'30',
     'data':{}

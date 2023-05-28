@@ -2,6 +2,67 @@
    "Bolokhovo, Komsomol'skaya ulitsa, 3": {
       "floors": "5",
       "flats": "30",
-      "data": {}
+      "data": {
+         "1": {
+            "room_type": "Corridor",
+            "floor": "5",
+            "flat": "10",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/1.mp4"
+         },
+         "2": {
+            "room_type": "Corridor",
+            "floor": "10",
+            "flat": "124",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/2.mp4"
+         },
+         "3": {
+            "room_type": "Room",
+            "floor": "12",
+            "flat": "41",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/3.mp4"
+         },
+         "4": {
+            "room_type": "Kitchen",
+            "floor": "1331",
+            "flat": "3423",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/4.mp4"
+         },
+         "5": {
+            "room_type": "Corridor",
+            "floor": "1331",
+            "flat": "3423",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/5.mp4"
+         },
+         "6": {
+            "room_type": "Hallway",
+            "floor": "43",
+            "flat": "43",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/6.mp4"
+         },
+         "7": {
+            "room_type": "Corridor",
+            "floor": "4",
+            "flat": "1",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/7.mp4"
+         },
+         "8": {
+            "room_type": "Room",
+            "floor": "231",
+            "flat": "421",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/8.mp4"
+         },
+         "9": {
+            "room_type": "Room",
+            "floor": "231",
+            "flat": "432",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/9.mp4"
+         },
+         "10": {
+            "room_type": "Room",
+            "floor": "123",
+            "flat": "41",
+            "video": "./videos/raw/Bolokhovo, Komsomol'skaya ulitsa, 3/10.mp4"
+         }
+      }
    }
 }

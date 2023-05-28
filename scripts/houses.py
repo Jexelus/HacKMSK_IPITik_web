@@ -3,8 +3,9 @@ import os
 import geocoder
 import torch
 import pathlib
+import cv2
 
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='/home/rooter/Desktop/OMGitWORK/HacKMSK_IPITik_web/models/best.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:\\Users\\dan08\\Documents\\HACK\HacKMSK_IPITik_web\\models\\best.pt', force_reload=True)
 
 def get_houses_dic():
     with open('./Houses/houses.json', 'r') as f:
@@ -45,6 +46,30 @@ def add_house(data): # WEB version
         f.close()
     return
 
+def cv2_f(path):
+    vidcap = cv2.VideoCapture(path)
+    success,image = vidcap.read()
+    count = 0
+    results = []
+    while success:
+        #cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file      
+        success,image = vidcap.read()
+        if success:
+            if count % 3 == 0:
+                try:
+                    m = model(image)         
+                    print(m)       
+                    crops = m.crop(save=False)
+                    
+                    name = crops[0]["label"]
+
+                    results.append(name)
+                except:
+                    continue
+                
+        count += 1
+    return results
+
 def update_house(data, video): # TODO: API version
     houses = get_houses_dic()            
     address = data['address']
@@ -62,18 +87,20 @@ def update_house(data, video): # TODO: API version
                 json.dump(houses, f, indent=3)
                 f.close()
             video.save('./videos/raw/'+address+"/"+str(room) + ".mp4")
-            return
+            datares =  cv2_f(data['video'])   
+            return datares 
+
     path = "./videos/raw/" + address + "/" + str(len(houses[address]['data'])+1) + ".mp4"
     houses[address]['data'].update({len(houses[address]['data'])+1:data})
     houses[address]['data'][len(houses[address]['data'])]['video'] = path
     video.save(path)
     vid_path = pathlib.Path(path)
-    results = model(vid_path)
-    results.print()
+    datares = cv2_f(path)
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
         f.close()
-    return
+        
+    return datares
 
 def delete_house_room(address, floor, flat, room_type): # TODO: API version
     houses = get_houses_dic()

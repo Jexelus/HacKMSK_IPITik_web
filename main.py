@@ -41,9 +41,8 @@ def delete_house_r():
 
 @app.route('/api/houses/update', methods=['POST'])
 def api_add_house():
-    if request.method == 'POST':
-        print(request.form)    
-        return jsonify(update_house(json.loads(request.form["info"]), request.files['video']))
+    if request.method == 'POST':  
+        return update_house(json.loads(request.form["info"]), request.files['video'])
     else:
         return jsonify({'success': False})
 

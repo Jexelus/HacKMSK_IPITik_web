@@ -33,17 +33,43 @@ def get_houses_address():
     else:
         return None
 
-def add_house(data): # WEB version
+def add_house(data_f): # WEB version
+    data = dict(data_f)
     houses = get_houses_dic()
     address = data['address']
     del data['address']
     if address in houses.keys():
         return 'Already in the system', 0 # TODO: handle
     houses[address] = data
+    houses[address]['data'] = {}
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
         f.close()
     return
+
+def cv2_f(path):
+    vidcap = cv2.VideoCapture(path)
+    success,image = vidcap.read()
+    count = 0
+    results = []
+    while success:
+        #cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file      
+        success,image = vidcap.read()
+        if success:
+            if count % 3 == 0:
+                try:
+                    m = model(image)         
+                    print(m)       
+                    crops = m.crop(save=False)
+                    
+                    name = crops[0]["label"]
+
+                    results.append(name)
+                except:
+                    continue
+                
+        count += 1
+    return results
 
 def update_house(data, video): # TODO: API version
     houses = get_houses_dic()            
@@ -62,18 +88,21 @@ def update_house(data, video): # TODO: API version
                 json.dump(houses, f, indent=3)
                 f.close()
             video.save('./videos/raw/'+address+"/"+str(room) + ".mp4")
-            return
+            datares =  cv2_f(data['video'])   
+            return datares 
+
     path = "./videos/raw/" + address + "/" + str(len(houses[address]['data'])+1) + ".mp4"
     houses[address]['data'].update({len(houses[address]['data'])+1:data})
     houses[address]['data'][len(houses[address]['data'])]['video'] = path
     video.save(path)
     vid_path = pathlib.Path(path)
-    results = model(vid_path)
-    results.print()
+    datares = cv2_f(path)
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
         f.close()
-    return
+        
+    return datares
+
 
 def delete_house_room(address, floor, flat, room_type): # TODO: API version
     houses = get_houses_dic()
@@ -102,24 +131,3 @@ def delete_house(address): # TODO
     except:
         return False
     return True
-
-d = {
-    'address':[59.5546666666667, 33.5907516666667],
-    'floors':'5',
-    'flats':'30',
-    'data':{}
-} 
-
-d2 = {
-    'address':[54.085676118550104, 37.832003036313964],
-    'floor':'2',
-    'flat':'2',
-    'room_type':'kit',
-    'progress':'2%'
-}
-#add_house(d)
-#print(update_house(d2))
-#delete_house_room("Bolokhovo, Komsomol'skaya ulitsa, 3", '2', '2', 'kit')
-#delete_house("Bolokhovo, Komsomol'skaya ulitsa, 3")
-#print(get_houses_address())
-#print(get_house("Bolokhovo, Komsomol'skaya ulitsa, 3"))

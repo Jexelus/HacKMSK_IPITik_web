@@ -14,16 +14,16 @@ def get_list_houses():
 @app.route('/api/houses/add', methods=['POST'])
 def add_address():
     if request.method == 'POST':
-        add_house(request.json)
-        return jsonify({'success': True})
+        add_house(request.form)
+        return redirect(url_for('index'))
     else:
         return jsonify({'success': False})
 
 @app.route('/api/houses/delete', methods=['POST'])
 def delete_address():
     if request.method == 'POST':
-        if delete_house(request.json['address']) == True:
-            return jsonify({'success': True})
+        if delete_house(request.form['address']) == True:
+            return redirect(url_for('index'))
         else:
             return jsonify({'success': False})
     else:
@@ -47,10 +47,9 @@ def api_add_house():
     else:
         return jsonify({'success': False})
 
-@app.route('/')
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', houses = get_houses_address())
 
 if __name__ == "__main__":
     app.run('0.0.0.0', 5050)

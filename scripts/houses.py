@@ -32,13 +32,11 @@ def get_houses_address():
 
 def add_house(data): # WEB version
     houses = get_houses_dic()
-    address_encodet = geocoder.bing(data['address'], method='reverse', key="AgcMEj_11MYB6Epe-VDXd9IP-LbzfMqVCQR0M6_AgUqKQ59O8fba4q51i4MjYD6R")
-    for res in address_encodet:
-        address = str(res.city) + ','+' '+str(res.street)
+    address = data['address']
     del data['address']
     if address in houses.keys():
         return 'Already in the system', 0 # TODO: handle
-    houses[str(res.city) + ','+' '+str(res.street)] = data
+    houses[address] = data
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
         f.close()
@@ -80,12 +78,12 @@ def delete_house_room(address, floor, flat, room_type): # TODO: API version
                 with open('./Houses/houses.json', 'w') as f:
                     json.dump(houses, f, indent=3)
                     f.close()
-                return
+                return True
     except:
         return False
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
-    return  
+    return True
 
 def delete_house(address): # TODO
     houses = get_houses_dic()
@@ -97,7 +95,7 @@ def delete_house(address): # TODO
         
     except:
         return False
-    return
+    return True
 
 d = {
     'address':[59.5546666666667, 33.5907516666667],

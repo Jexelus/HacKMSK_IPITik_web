@@ -1,7 +1,10 @@
 import json
 import os
 import geocoder
-from predict import predict
+import torch
+import pathlib
+
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='/home/rooter/Desktop/OMGitWORK/HacKMSK_IPITik_web/models/best.pt', force_reload=True)
 
 def get_houses_dic():
     with open('./Houses/houses.json', 'r') as f:
@@ -52,6 +55,8 @@ def update_house(data, video): # TODO: API version
     for room, data_r in houses[address]['data'].items():
         if data['floor'] == data_r['floor'] and data['flat'] == data_r['flat'] and data['room_type'] == data_r['room_type']:
             data['video'] = './videos/raw/'+address+"/"+str(room) + ".mp4"
+            results = model(data['video'])
+            results.print()
             houses[address]['data'][room] = data
             with open('./Houses/houses.json', 'w') as f:
                 json.dump(houses, f, indent=3)
@@ -62,12 +67,13 @@ def update_house(data, video): # TODO: API version
     houses[address]['data'].update({len(houses[address]['data'])+1:data})
     houses[address]['data'][len(houses[address]['data'])]['video'] = path
     video.save(path)
-    pred_list = predict(weights="/models/best.pt", source=path)
-    print(pred_list)
+    vid_path = pathlib.Path(path)
+    results = model(vid_path)
+    results.print()
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
         f.close()
-    return pred_list
+    return
 
 def delete_house_room(address, floor, flat, room_type): # TODO: API version
     houses = get_houses_dic()

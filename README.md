@@ -16,9 +16,10 @@ git clone https://github.com/ultralytics/yolov5
 pip install -r yolov5/requirements.txt
 ```
 
-3. Move predict.py to yolov5 directory
-```bash
-mv predict.py yolov5/
+3. Edit path to our model in code
+```python
+#scripts.houses.py line 7 
+#/home/rooter/Desktop/OMGitWORK/HacKMSK_IPITik_web/models/best.pt my path, your path can be other
 ```
 
 4. Start server with command

@@ -1,7 +1,7 @@
 import json
 import os
 import geocoder
-from yolov5.predict import predict
+from predict import predict
 
 def get_houses_dic():
     with open('./Houses/houses.json', 'r') as f:

@@ -16,11 +16,8 @@ def get_list_houses():
 @app.route('/api/houses/update', methods=['POST'])
 def api_add_house():
     if request.method == 'POST':
-        video = request.files.get('video')
-        video_name = video.filename
-        video.save('/videos/raw', video_name)
-        update_house(request.json)
-        return jsonify("ok")
+        print(request.form)    
+        return jsonify(update_house(json.loads(request.form["info"]), request.files['video']))
     else:
         return 'BAD REQUEST'
 
@@ -32,5 +29,4 @@ def index():
     return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run('127.0.0.6', 5050)
-    
+    app.run('0.0.0.0', 5050)

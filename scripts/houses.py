@@ -62,10 +62,14 @@ def update_house(data, video): # TODO: API version
             return
     path = "./videos/raw/" + address + "/" + str(len(houses[address]['data'])+1) + ".mp4"
     houses[address]['data'].update({len(houses[address]['data'])+1:data})
+    houses[address]['data'][len(houses[address]['data'])]['video'] = path
+    video.save(path)
+    pred_list = predict(weights="/models/best.pt", source=path)
+    print(pred_list)
     with open('./Houses/houses.json', 'w') as f:
         json.dump(houses, f, indent=3)
         f.close()
-    return 
+    return pred_list
 
 def delete_house_room(address, floor, flat, room_type): # TODO: API version
     houses = get_houses_dic()

@@ -3,8 +3,9 @@ import os
 import geocoder
 import torch
 import pathlib
+import cv2
 
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='/home/rooter/Desktop/OMGitWORK/HacKMSK_IPITik_web/models/best.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:\\Users\\dan08\\Documents\\HACK\HacKMSK_IPITik_web\\models\\best.pt', force_reload=True)
 
 def get_houses_dic():
     with open('./Houses/houses.json', 'r') as f:
@@ -102,7 +103,6 @@ def update_house(data, video): # TODO: API version
         f.close()
         
     return datares
-
 
 def delete_house_room(address, floor, flat, room_type): # TODO: API version
     houses = get_houses_dic()
